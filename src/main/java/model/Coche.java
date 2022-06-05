@@ -2,7 +2,6 @@ package model;
 
 public class Coche extends Vehiculo{
 
-   // private String matricula;
     private int numPlazas;
     private int numPuertas;
 
@@ -18,14 +17,6 @@ public class Coche extends Vehiculo{
         this.numPlazas = numPlazas;
         this.numPuertas = numPuertas;
     }
-
-    /*public String getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
-    }*/
 
     public int getNumPlazas() {
         return numPlazas;

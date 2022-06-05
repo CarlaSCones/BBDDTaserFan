@@ -19,7 +19,7 @@ public class EmpleadoController {
 
 
     public static Result<Empleado> authenticate(Request request, Response response) {
-        logger.info("Autenticando ");
+        logger.info("Autenticando...");
         String body = request.body();
 
         JsonTransformer<AuthenticateData> jst = new JsonTransformer<>();

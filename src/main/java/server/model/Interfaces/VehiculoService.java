@@ -9,6 +9,7 @@ import java.util.List;
 public interface VehiculoService {
     List<Vehiculo> getAll();
     List<Vehiculo> getAll(TipoVehiculo tipo);
+    Result<Vehiculo> get(String matricula);
     Result<Vehiculo> update(Vehiculo vehiculo);
     Result<Vehiculo> add(Vehiculo vehiculo);
     Result<Vehiculo> delete(String matricula);

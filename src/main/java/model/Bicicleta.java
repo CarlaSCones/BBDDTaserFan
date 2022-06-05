@@ -2,7 +2,6 @@ package model;
 
 public class Bicicleta extends Vehiculo{
 
-   // private String matricula;
     private String tipo;
 
     public Bicicleta(String matricula, int preciohora, String marca, String descripcion, Color color, int bateria, Estado estado, int idCarnet, String changedBy, TipoVehiculo tipoVehiculo, String tipo) {
@@ -14,13 +13,6 @@ public class Bicicleta extends Vehiculo{
         super(matricula);
         this.tipo=tipo;
     }
-   /* public String getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
-    }*/
 
     public String getTipo() {
         return tipo;

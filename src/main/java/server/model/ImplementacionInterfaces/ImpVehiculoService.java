@@ -1,6 +1,7 @@
 package server.model.ImplementacionInterfaces;
 
 import model.*;
+import server.controllers.VehiculoController;
 import server.model.Interfaces.VehiculoService;
 
 import javax.sql.DataSource;
@@ -59,47 +60,48 @@ public class ImpVehiculoService implements VehiculoService {
                 idCarnet = resultSet.getInt("idCarnet");
                 changedBy = resultSet.getString("changedBy");
 
-                Color colorCoche = Color.ROJO;
+                Color colorV = Color.ROJO;
                 switch (color){
                     case "rojo":
-                        colorCoche = Color.ROJO;
+                        colorV = Color.ROJO;
                         break;
                     case "amarillo":
-                        colorCoche = Color.AMARILLO;
+                        colorV = Color.AMARILLO;
                         break;
                     case "verde":
-                        colorCoche = Color.VERDE;
+                        colorV = Color.VERDE;
                         break;
                     case "azul":
-                        colorCoche = Color.AZUL;
+                        colorV = Color.AZUL;
                         break;
                     case "blanco":
-                        colorCoche = Color.BLANCO;
+                        colorV = Color.BLANCO;
                         break;
                     case "negro":
-                        colorCoche = Color.NEGRO;
+                        colorV = Color.NEGRO;
                         break;
                 }
 
-                Estado estadoCoche = Estado.PREPARADO;
+                Estado estadoV = Estado.PREPARADO;
                 switch (estado){
                     case "baja":
-                        estadoCoche = Estado.BAJA;
+                        estadoV = Estado.BAJA;
                         break;
                     case "taller":
-                        estadoCoche = Estado.TALLER;
+                        estadoV = Estado.TALLER;
                         break;
                     case "preparado":
-                        estadoCoche = Estado.PREPARADO;
+                        estadoV = Estado.PREPARADO;
                         break;
                     case "reservado":
-                        estadoCoche = Estado.RESERVADO;
+                        estadoV = Estado.RESERVADO;
                         break;
                     case "alquilado":
-                        estadoCoche = Estado.ALQUILADO;
+                        estadoV = Estado.ALQUILADO;
                         break;
                 }
-                vehiculoList.add(new Vehiculo(matricula,preciohora,marca));
+
+                vehiculoList.add(new Vehiculo(matricula,preciohora, marca, descripcion, colorV, bateria, estadoV, idCarnet, changedBy, tipoVehiculo));
 
             }
 
@@ -107,6 +109,106 @@ public class ImpVehiculoService implements VehiculoService {
             throwables.printStackTrace();
         }
         return vehiculoList;
+    }
+
+    @Override
+    public Result<Vehiculo> get(String matricula) {
+        DataSource dataSource = MyDataSource.getMyOracleDataSource();
+
+        try (Connection con = dataSource.getConnection();
+             Statement statement = con.createStatement();
+             ResultSet resultSet = statement.executeQuery("select * from vehiculo where matricula='" + matricula + "'")) {
+
+            int preciohora;
+            String marca;
+            String descripcion;
+            String color;
+            int bateria;
+            String estado;
+            int idCarnet;
+            String changedBy;
+
+            if (resultSet.next()) {
+
+                matricula = resultSet.getString("matricula");
+                preciohora = resultSet.getInt("preciohora");
+                marca = resultSet.getString("marca");
+                descripcion = resultSet.getString("descripcion");
+                color = resultSet.getString("color").toLowerCase();
+                bateria = resultSet.getInt("bateria");
+                estado = resultSet.getString("estado").toLowerCase();
+                idCarnet = resultSet.getInt("idCarnet");
+                changedBy = resultSet.getString("changedBy");
+
+                Color colorV = Color.ROJO;
+                switch (color){
+                    case "rojo":
+                        colorV = Color.ROJO;
+                        break;
+                    case "amarillo":
+                        colorV = Color.AMARILLO;
+                        break;
+                    case "verde":
+                        colorV = Color.VERDE;
+                        break;
+                    case "azul":
+                        colorV = Color.AZUL;
+                        break;
+                    case "blanco":
+                        colorV = Color.BLANCO;
+                        break;
+                    case "negro":
+                        colorV = Color.NEGRO;
+                        break;
+                }
+
+                Estado estadoV = Estado.PREPARADO;
+                switch (estado){
+                    case "baja":
+                        estadoV = Estado.BAJA;
+                        break;
+                    case "taller":
+                        estadoV = Estado.TALLER;
+                        break;
+                    case "preparado":
+                        estadoV = Estado.PREPARADO;
+                        break;
+                    case "reservado":
+                        estadoV = Estado.RESERVADO;
+                        break;
+                    case "alquilado":
+                        estadoV = Estado.ALQUILADO;
+                        break;
+                }
+                TipoVehiculo tipoVehiculo = TipoVehiculo.COCHE;
+                switch (estado){
+                    case "coche":
+                        tipoVehiculo = TipoVehiculo.COCHE;
+                        break;
+                    case "moto":
+                        tipoVehiculo = TipoVehiculo.MOTO;
+                        break;
+                    case "bicicleta":
+                        tipoVehiculo = TipoVehiculo.BICICLETA;
+                        break;
+                    case "patinete":
+                        tipoVehiculo = TipoVehiculo.PATINETE;
+                        break;
+                }
+                Vehiculo vehiculo = new Vehiculo(matricula,preciohora, marca, descripcion, colorV, bateria, estadoV, idCarnet, changedBy, tipoVehiculo);
+                return new Result.Success<>(200);
+
+            } else {
+                return new Result.Error("No se ha encontrado la matricula " + matricula, 404);
+            }
+
+        }catch (SQLSyntaxErrorException sqlee){
+            return new Result.Error("Error de acceso a la BD", 404);
+        }catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return new Result.Error(throwables.getMessage(),404);
+        }
+
     }
 
     @Override
@@ -138,7 +240,6 @@ public class ImpVehiculoService implements VehiculoService {
         }
     }
 
-    //No
     @Override
     public Result<Vehiculo> add(Vehiculo vehiculo) {
         DataSource ds = MyDataSource.getMyOracleDataSource();

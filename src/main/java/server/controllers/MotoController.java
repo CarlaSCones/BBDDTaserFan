@@ -1,13 +1,10 @@
 package server.controllers;
 
-import model.Coche;
 import model.Moto;
 import model.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.model.ImplementacionInterfaces.ImpCocheService;
 import server.model.ImplementacionInterfaces.ImpMotoService;
-import server.model.Interfaces.CocheService;
 import server.model.Interfaces.MotoService;
 import server.model.JsonTransformer;
 import spark.Request;

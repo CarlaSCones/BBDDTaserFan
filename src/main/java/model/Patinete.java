@@ -18,15 +18,6 @@ public class Patinete extends Vehiculo{
         this.tamanyo = tamanyo;
     }
 
-
-   /* public String getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
-    }*/
-
     public int getNumRuedas() {
         return numRuedas;
     }

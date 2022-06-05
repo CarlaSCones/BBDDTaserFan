@@ -18,14 +18,6 @@ public class Moto extends Vehiculo{
         this.cilindrada = cilindrada;
     }
 
-   /* public String getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
-    }*/
-
     public int getVelocidadMax() {
         return velocidadMax;
     }

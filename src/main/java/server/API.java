@@ -3,7 +3,7 @@ package server;
 public class API {
 
     public static class Routes {
-        // Oracle
+
         public static final String AUTHENTICATE = "/authenticate";
 
         public static final String VEHICULOS = "/vehiculos";

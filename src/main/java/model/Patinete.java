@@ -5,9 +5,8 @@ public class Patinete extends Vehiculo{
     private int numRuedas;
     private int tamanyo;
 
-    public Patinete(String matricula, int preciohora, String marca, String descripcion, Color color, int bateria,
-                    Estado estado, int idCarnet, String changedBy, TipoVehiculo tipo, int numRuedas, int tamanyo) {
-        super(matricula, preciohora, marca, descripcion, color, bateria, estado, idCarnet, changedBy, tipo);
+    public Patinete(String matricula, String descripcion, Color color, Estado estado, TipoVehiculo tipo, int numRuedas, int tamanyo) {
+        super(matricula, descripcion, color, estado, tipo);
         this.numRuedas = numRuedas;
         this.tamanyo = tamanyo;
     }

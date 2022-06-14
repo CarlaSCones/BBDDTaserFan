@@ -17,7 +17,7 @@ public class ImpVehiculoService implements VehiculoService {
         List<Vehiculo> vehiculoList = new ArrayList<>();
         TipoVehiculo vehiculos[] = {
                 TipoVehiculo.COCHE,
-                TipoVehiculo.BICICLETA,
+                TipoVehiculo.MOTO,
                 TipoVehiculo.BICICLETA,
                 TipoVehiculo.PATINETE
         };
@@ -40,25 +40,15 @@ public class ImpVehiculoService implements VehiculoService {
             ResultSet resultSet = statement.executeQuery("select * from vehiculo")){
 
             String matricula;
-            int preciohora;
-            String marca;
             String descripcion;
             String color;
-            int bateria;
             String estado;
-            int idCarnet;
-            String changedBy;
 
             while(resultSet.next()){
                 matricula = resultSet.getString("matricula");
-                preciohora = resultSet.getInt("preciohora");
-                marca = resultSet.getString("marca");
                 descripcion = resultSet.getString("descripcion");
                 color = resultSet.getString("color").toLowerCase();
-                bateria = resultSet.getInt("bateria");
                 estado = resultSet.getString("estado").toLowerCase();
-                idCarnet = resultSet.getInt("idCarnet");
-                changedBy = resultSet.getString("changedBy");
 
                 Color colorV = Color.ROJO;
                 switch (color){
@@ -101,7 +91,7 @@ public class ImpVehiculoService implements VehiculoService {
                         break;
                 }
 
-                vehiculoList.add(new Vehiculo(matricula,preciohora, marca, descripcion, colorV, bateria, estadoV, idCarnet, changedBy, tipoVehiculo));
+                vehiculoList.add(new Vehiculo(matricula, descripcion, colorV,estadoV, tipoVehiculo));
 
             }
 
@@ -119,26 +109,16 @@ public class ImpVehiculoService implements VehiculoService {
              Statement statement = con.createStatement();
              ResultSet resultSet = statement.executeQuery("select * from vehiculo where matricula='" + matricula + "'")) {
 
-            int preciohora;
-            String marca;
             String descripcion;
             String color;
-            int bateria;
             String estado;
-            int idCarnet;
-            String changedBy;
 
             if (resultSet.next()) {
 
                 matricula = resultSet.getString("matricula");
-                preciohora = resultSet.getInt("preciohora");
-                marca = resultSet.getString("marca");
                 descripcion = resultSet.getString("descripcion");
                 color = resultSet.getString("color").toLowerCase();
-                bateria = resultSet.getInt("bateria");
                 estado = resultSet.getString("estado").toLowerCase();
-                idCarnet = resultSet.getInt("idCarnet");
-                changedBy = resultSet.getString("changedBy");
 
                 Color colorV = Color.ROJO;
                 switch (color){
@@ -195,7 +175,7 @@ public class ImpVehiculoService implements VehiculoService {
                         tipoVehiculo = TipoVehiculo.PATINETE;
                         break;
                 }
-                Vehiculo vehiculo = new Vehiculo(matricula,preciohora, marca, descripcion, colorV, bateria, estadoV, idCarnet, changedBy, tipoVehiculo);
+                Vehiculo vehiculo = new Vehiculo(matricula, descripcion, colorV,estadoV, tipoVehiculo);
                 return new Result.Success<>(200);
 
             } else {
@@ -221,14 +201,9 @@ public class ImpVehiculoService implements VehiculoService {
              PreparedStatement pstmt = con.prepareStatement(sql);
         ) {
             int pos = 0;
-            pstmt.setFloat(++pos, vehiculo.getPreciohora());
-            pstmt.setString(++pos, vehiculo.getMarca());
             pstmt.setString(++pos, vehiculo.getDescripcion());
             pstmt.setString(++pos, String.valueOf(vehiculo.getColor()));
-            pstmt.setInt(++pos, vehiculo.getBateria());
             pstmt.setString(++pos, String.valueOf(vehiculo.getEstado()));
-            pstmt.setInt(++pos, vehiculo.getIdCarnet());
-            pstmt.setString(++pos, vehiculo.getChangedBy());
             pstmt.setString(++pos, vehiculo.getMatricula());
             int cant = pstmt.executeUpdate();
             if (cant == 1)
@@ -247,9 +222,8 @@ public class ImpVehiculoService implements VehiculoService {
 
         try(Connection con = ds.getConnection();
             Statement statement = con.createStatement();){
-            String sql = "INSERT INTO " + "vehiculo VALUES ('" +vehiculo.getMatricula()+ "','"
-                    +vehiculo.getPreciohora()+ "','" +vehiculo.getMarca()+ "','" +vehiculo.getDescripcion()+ "','" +vehiculo.getColor()+
-                    "','" +vehiculo.getBateria()+"','" + vehiculo.getEstado()+ "','" +vehiculo.getIdCarnet()+ "','" +vehiculo.getChangedBy()+ "')";
+            String sql = "INSERT INTO " + "vehiculo VALUES ('" +vehiculo.getMatricula()+ "','" +vehiculo.getDescripcion()
+                    + "','" +vehiculo.getColor()+"','" + vehiculo.getEstado()+ "')";
 
             int count = statement.executeUpdate(sql);
             if(count==1)

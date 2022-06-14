@@ -48,12 +48,10 @@ public class ImpEmpleadoService implements EmpleadoService {
             } else
                 return new Result.Error("Email y/o password incorrectos.", 404);
 
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             return new Result.Error(throwables.getMessage(), 404);
         }
-
 
     }
 

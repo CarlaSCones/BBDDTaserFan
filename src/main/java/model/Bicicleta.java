@@ -4,8 +4,8 @@ public class Bicicleta extends Vehiculo{
 
     private String tipo;
 
-    public Bicicleta(String matricula, int preciohora, String marca, String descripcion, Color color, int bateria, Estado estado, int idCarnet, String changedBy, TipoVehiculo tipoVehiculo, String tipo) {
-        super(matricula, preciohora, marca, descripcion, color, bateria, estado, idCarnet, changedBy, tipoVehiculo);
+    public Bicicleta(String matricula, String descripcion, Color color, Estado estado, TipoVehiculo tipoVehiculo, String tipo) {
+        super(matricula,descripcion, color, estado, tipoVehiculo);
         this.tipo=tipo;
     }
 

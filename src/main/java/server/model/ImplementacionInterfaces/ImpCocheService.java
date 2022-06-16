@@ -76,10 +76,14 @@ public class ImpCocheService implements CocheService {
         try (Connection con = ds.getConnection();
              PreparedStatement pstmt = con.prepareStatement(sql);
         ) {
+
             int pos = 0;
-            pstmt.setInt(++pos, coche.getNumPlazas());
-            pstmt.setInt(++pos, coche.getNumPuertas());
-            pstmt.setString(++pos, coche.getMatricula());
+            if(coche.getMatricula()!=null){
+                pstmt.setInt(++pos, coche.getNumPlazas());
+                pstmt.setInt(++pos, coche.getNumPuertas());
+                pstmt.setString(++pos, coche.getMatricula());
+            }
+
             int cant = pstmt.executeUpdate();
             if (cant == 1)
                 return new Result.Success<>(200);
@@ -96,11 +100,15 @@ public class ImpCocheService implements CocheService {
 
         try(Connection con = ds.getConnection();
             Statement statement = con.createStatement();){
-            String sql = "INSERT INTO " + "coche VALUES ('" +coche.getMatricula()+ "','"
-                    +coche.getNumPlazas()+ "','" +coche.getNumPuertas()+ "')";
+            String sqlV = "INSERT INTO vehiculo (matricula, precioHora, marca, descripcion, color, bateria, fechaadq, estado, idCarnet) VALUES ('"
+                    +coche.getMatricula()+ "','" +coche.getPrecioHora()+ "','" +coche.getMarca()+ "','" +coche.getDescripcion()
+                    + "','" +coche.getColor()+ "','" +coche.getBateria()+ "',to_date('" +coche.getFechaadq()+"','YYYY-MM-DD'),'" + coche.getEstado()
+                    + "','" +coche.getIdCarnet()+ "')";
+            String sqlC = " INSERT INTO " + "coche VALUES ('" +coche.getMatricula()+ "','" +coche.getNumPlazas()+ "','" +coche.getNumPuertas()+ "')";
 
-            int count = statement.executeUpdate(sql);
-            if(count==1)
+            int count = statement.executeUpdate(sqlV);
+            int count2= statement.executeUpdate(sqlC);
+            if(count==1 && count2==1)
                 return new Result.Success<>(200);
             else
                 return new Result.Error("Error al añadir el coche",404);
@@ -114,15 +122,16 @@ public class ImpCocheService implements CocheService {
     @Override
     public Result<Coche> delete(String matricula) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
+        int cant = 0;
         String sql = "DELETE FROM coche WHERE matricula = ?";
         try (Connection con = ds.getConnection();
              PreparedStatement pstmt = con.prepareStatement(sql);
         ) {
             int pos = 0;
             pstmt.setString(++pos, matricula);
-            int res = pstmt.executeUpdate();
+            cant = pstmt.executeUpdate();
 
-            if(res==1)
+            if(cant==1)
                 return new Result.Success<>(200);
             else
                 return new Result.Error("Ningun coche eliminado",404);

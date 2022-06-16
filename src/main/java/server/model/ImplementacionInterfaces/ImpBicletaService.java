@@ -73,7 +73,10 @@ public class ImpBicletaService implements BicicletaService {
              PreparedStatement pstmt = con.prepareStatement(sql);
         ) {
             int pos = 0;
-            pstmt.setString(++pos, bicicleta.getTipo());
+            if(bicicleta.getMatricula()!=null){
+                pstmt.setString(++pos, bicicleta.getTipo());
+                pstmt.setString(++pos, bicicleta.getMatricula());
+            }
             int cant = pstmt.executeUpdate();
             if (cant == 1)
                 return new Result.Success<>(200);
@@ -90,11 +93,16 @@ public class ImpBicletaService implements BicicletaService {
 
         try(Connection con = ds.getConnection();
             Statement statement = con.createStatement();){
-            String sql = "INSERT INTO " + "bicicleta VALUES ('" +bicicleta.getMatricula()+ "','"
+            String sqlV = "INSERT INTO vehiculo (matricula, precioHora, marca, descripcion, color, bateria, fechaadq, estado, idCarnet) VALUES ('"
+                    +bicicleta.getMatricula()+ "','" +bicicleta.getPrecioHora()+ "','" +bicicleta.getMarca()+ "','" +bicicleta.getDescripcion()
+                    + "','" +bicicleta.getColor()+ "','" +bicicleta.getBateria()+ "',to_date('" +bicicleta.getFechaadq()+"','YYYY-MM-DD'),'" + bicicleta.getEstado()
+                    + "','" +bicicleta.getIdCarnet()+ "')";
+            String sqlB = "INSERT INTO " + "bicicleta VALUES ('" +bicicleta.getMatricula()+ "','"
                     +bicicleta.getTipo()+ "')";
 
-            int count = statement.executeUpdate(sql);
-            if(count==1)
+            int count = statement.executeUpdate(sqlV);
+            int count2 = statement.executeUpdate(sqlB);
+            if(count==1 && count2==1)
                 return new Result.Success<>(200);
             else
                 return new Result.Error("Error al añadir la bicicleta",404);
@@ -108,21 +116,22 @@ public class ImpBicletaService implements BicicletaService {
     @Override
     public Result<Bicicleta> delete(String matricula) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
+        int cant = 0;
         String sql = "DELETE FROM bicicleta WHERE matricula = ?";
         try (Connection con = ds.getConnection();
              PreparedStatement pstmt = con.prepareStatement(sql);
         ) {
+
             int pos = 0;
             pstmt.setString(++pos, matricula);
-            int res = pstmt.executeUpdate();
+            cant = pstmt.executeUpdate();
 
-            if(res==1)
+            if(cant==1)
                 return new Result.Success<>(200);
             else
                 return new Result.Error("Ninguna bicicleta eliminada",404);
 
         } catch (Exception e) {
-            e.printStackTrace();
             return new Result.Error(e.getMessage(),404);
         }
     }

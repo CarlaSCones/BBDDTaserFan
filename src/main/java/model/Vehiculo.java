@@ -1,17 +1,24 @@
 package model;
 
+import java.sql.Date;
+
 public class Vehiculo {
 
     private String matricula;
-//    private int preciohora;
-//    private String marca;
+    private int precioHora;
+    private String marca;
     private String descripcion;
     private Color color;
-//    private int bateria;
+    private int bateria;
+    private Date fechaadq;
     private Estado estado;
-//    private int idCarnet;
-//    private String changedBy;
+    private int idCarnet;
+    private String changedBy;
     private TipoVehiculo tipoVehiculo;
+
+    public Vehiculo(String matricula) {
+        this.matricula = matricula;
+    }
 
     public Vehiculo(String matricula, String descripcion, Color color, Estado estado, TipoVehiculo tipoVehiculo) {
         this.matricula = matricula;
@@ -21,8 +28,17 @@ public class Vehiculo {
         this.tipoVehiculo = tipoVehiculo;
     }
 
-    public Vehiculo(String matricula) {
+    public Vehiculo(String matricula, int precioHora, String marca, String descripcion, Color color, int bateria, Date fechaadq, Estado estado, int idCarnet, TipoVehiculo tipoVehiculo) {
         this.matricula = matricula;
+        this.precioHora = precioHora;
+        this.marca = marca;
+        this.descripcion=descripcion;
+        this.color = color;
+        this.bateria = bateria;
+        this.fechaadq=fechaadq;
+        this.estado = estado;
+        this.idCarnet = idCarnet;
+        this.tipoVehiculo = tipoVehiculo;
     }
 
     public String getMatricula() {
@@ -32,25 +48,13 @@ public class Vehiculo {
     public void setMatricula(String matricula) {
         this.matricula = matricula;
     }
-    /* public Vehiculo(String matricula, int preciohora, String marca, String descripcion, Color color, int bateria, Estado estado, int idCarnet, String changedBy, TipoVehiculo tipoVehiculo) {
-       this.matricula = matricula;
-       this.preciohora = preciohora;
-       this.marca = marca;
-       this.descripcion=descripcion;
-       this.color = color;
-       this.bateria = bateria;
-       this.estado = estado;
-       this.idCarnet = idCarnet;
-       this.changedBy = changedBy;
-       this.tipoVehiculo = tipoVehiculo;
-   }
 
-    public int getPreciohora() {
-        return preciohora;
+    public int getPrecioHora() {
+        return precioHora;
     }
 
-    public void setPreciohora(int preciohora) {
-        this.preciohora = preciohora;
+    public void setPrecioHora(int precioHora) {
+        this.precioHora = precioHora;
     }
 
     public String getMarca() {
@@ -68,6 +72,11 @@ public class Vehiculo {
     public void setBateria(int bateria) {
         this.bateria = bateria;
     }
+
+    public Date getFechaadq() {
+        return fechaadq;
+    }
+
     public int getIdCarnet() {
         return idCarnet;
     }
@@ -83,7 +92,7 @@ public class Vehiculo {
     public void setChangedBy(String changedBy) {
         this.changedBy = changedBy;
     }
-*/
+
     public String getDescripcion() {
         return descripcion;
     }

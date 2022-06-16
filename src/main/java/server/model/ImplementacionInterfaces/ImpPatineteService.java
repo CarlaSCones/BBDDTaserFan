@@ -80,9 +80,11 @@ public class ImpPatineteService implements PatineteService {
              PreparedStatement pstmt = con.prepareStatement(sql);
         ) {
             int pos = 0;
-            pstmt.setInt(++pos, patinete.getNumRuedas());
-            pstmt.setInt(++pos, patinete.getTamanyo());
-            pstmt.setString(++pos, patinete.getMatricula());
+            if(patinete.getMatricula()!=null){
+                pstmt.setInt(++pos, patinete.getNumRuedas());
+                pstmt.setInt(++pos, patinete.getTamanyo());
+                pstmt.setString(++pos, patinete.getMatricula());
+            }
             int cant = pstmt.executeUpdate();
             if (cant == 1)
                 return new Result.Success<>(200);
@@ -99,11 +101,16 @@ public class ImpPatineteService implements PatineteService {
 
         try(Connection con = ds.getConnection();
             Statement statement = con.createStatement();){
-            String sql = "INSERT INTO " + "patinete VALUES ('" +patinete.getMatricula()+ "','"
+            String sqlV = "INSERT INTO vehiculo (matricula, precioHora, marca, descripcion, color, bateria, fechaadq, estado, idCarnet) VALUES ('"
+                    +patinete.getMatricula()+ "','" +patinete.getPrecioHora()+ "','" +patinete.getMarca()+ "','" +patinete.getDescripcion()
+                    + "','" +patinete.getColor()+ "','" +patinete.getBateria()+ "',to_date('" +patinete.getFechaadq()+"','YYYY-MM-DD'),'" + patinete.getEstado()
+                    + "','" +patinete.getIdCarnet()+ "')";
+            String sqlP = "INSERT INTO " + "patinete VALUES ('" +patinete.getMatricula()+ "','"
                     +patinete.getNumRuedas()+ "','" +patinete.getTamanyo()+ "')";
 
-            int count = statement.executeUpdate(sql);
-            if(count==1)
+            int count = statement.executeUpdate(sqlV);
+            int count2 = statement.executeUpdate(sqlP);
+            if(count==1 && count2==1)
                 return new Result.Success<>(200);
             else
                 return new Result.Error("Error al añadir el patinete",404);
@@ -117,21 +124,21 @@ public class ImpPatineteService implements PatineteService {
     @Override
     public Result<Patinete> delete(String matricula) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
+        int cant = 0;
         String sql = "DELETE FROM patinete WHERE matricula = ?";
         try (Connection con = ds.getConnection();
              PreparedStatement pstmt = con.prepareStatement(sql);
         ) {
-            int pos = 0;
+            int pos= 0;
             pstmt.setString(++pos, matricula);
-            int res = pstmt.executeUpdate();
+            cant = pstmt.executeUpdate();
 
-            if(res==1)
+            if(cant==1)
                 return new Result.Success<>(200);
             else
                 return new Result.Error("Ningun patinete eliminado",404);
 
         } catch (Exception e) {
-            e.printStackTrace();
             return new Result.Error(e.getMessage(),404);
         }
     }
